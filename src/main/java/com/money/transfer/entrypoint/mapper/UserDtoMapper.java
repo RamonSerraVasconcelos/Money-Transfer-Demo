@@ -11,6 +11,7 @@ public class UserDtoMapper {
                 .name(user.getName())
                 .email(user.getEmail())
                 .cpf(user.getCpf())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 }

@@ -23,6 +23,7 @@ public class UserEntityMapper {
                 .email(userEntity.getEmail())
                 .cpf(userEntity.getCpf())
                 .password(userEntity.getPassword())
+                .createdAt(userEntity.getCreatedAt())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package com.money.transfer.dataprovider.database.impl;
 
 import com.money.transfer.core.model.User;
 import com.money.transfer.core.usecase.boundary.FindAllUsersBoundary;
+import com.money.transfer.dataprovider.database.entity.UserEntity;
 import com.money.transfer.dataprovider.database.mapper.UserEntityMapper;
 import com.money.transfer.dataprovider.database.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class FindAllUsersGateway implements FindAllUsersBoundary {
     private final UserRepository userRepository;
 
     public List<User> findUsers() {
+        List<UserEntity> userEntities = userRepository.findAllByOrderByIdAsc();
         return userRepository.findAllByOrderByIdAsc().stream().map(UserEntityMapper::userEntityToUser).collect(Collectors.toList());
     }
 }
