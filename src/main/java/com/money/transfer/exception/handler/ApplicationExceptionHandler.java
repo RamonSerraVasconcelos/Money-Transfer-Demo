@@ -1,6 +1,7 @@
 package com.money.transfer.exception.handler;
 
 import com.money.transfer.exception.ResourceConflictException;
+import com.money.transfer.exception.ResourceNotFoundException;
 import com.money.transfer.exception.ResourceViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,10 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(ResourceConflictException.class)
     public ResponseEntity<ErrorDetails> resourceConflictExceptionHandler(ResourceConflictException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(buildResponseError(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorDetails> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildResponseError(ex.getMessage()));
     }
 }

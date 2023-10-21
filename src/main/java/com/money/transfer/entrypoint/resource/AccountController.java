@@ -1,12 +1,15 @@
 package com.money.transfer.entrypoint.resource;
 
 import com.money.transfer.core.model.Account;
+import com.money.transfer.core.usecase.AddBalanceUseCase;
 import com.money.transfer.core.usecase.CreateAccountUseCase;
 import com.money.transfer.entrypoint.dto.AccountRequestDto;
 import com.money.transfer.entrypoint.dto.AccountResponseDto;
+import com.money.transfer.entrypoint.dto.DepositRequestDto;
 import com.money.transfer.entrypoint.mapper.AccountDtoMapper;
 import com.money.transfer.exception.ResourceViolationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,8 @@ public class AccountController {
 
     private final CreateAccountUseCase createAccountUseCase;
 
+    private final AddBalanceUseCase addBalanceUseCase;
+
     private final Validator validator;
 
     @PostMapping
@@ -35,5 +40,17 @@ public class AccountController {
         Account createdAccount = createAccountUseCase.createAccount(accountRequestDto.getUserId(), accountRequestDto.getCnpj());
 
         return AccountDtoMapper.accountToAccountResponseDto(createdAccount);
+    }
+
+    @PostMapping("/deposit")
+    public ResponseEntity<Void> addBalance(@RequestBody DepositRequestDto depositRequestDto) {
+       Set<ConstraintViolation<DepositRequestDto>> violations = validator.validate(depositRequestDto);
+       if (!violations.isEmpty()) {
+           throw new ResourceViolationException(violations);
+       }
+
+       addBalanceUseCase.addBalance(depositRequestDto.getUserId(), depositRequestDto.getAmount());
+
+       return ResponseEntity.ok().build();
     }
 }
