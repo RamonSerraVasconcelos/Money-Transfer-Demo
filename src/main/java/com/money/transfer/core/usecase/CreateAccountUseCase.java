@@ -2,8 +2,7 @@ package com.money.transfer.core.usecase;
 
 import com.money.transfer.core.model.Account;
 import com.money.transfer.core.model.User;
-import com.money.transfer.core.usecase.boundary.FindAccountByAgencyBoundary;
-import com.money.transfer.core.usecase.boundary.FindAccountByNumberBoundary;
+import com.money.transfer.core.usecase.boundary.FindAccountBoundary;
 import com.money.transfer.core.usecase.boundary.FindAccountByUserIdBoundary;
 import com.money.transfer.core.usecase.boundary.FindUserByIdBoundary;
 import com.money.transfer.core.usecase.boundary.SaveAccountBoundary;
@@ -26,18 +25,14 @@ public class CreateAccountUseCase {
 
     private final FindAccountByUserIdBoundary findAccountByUserIdBoundary;
 
-    private final FindAccountByAgencyBoundary findAccountByAgencyBoundary;
-
-    private final FindAccountByNumberBoundary findAccountByNumberBoundary;
+    private final FindAccountBoundary findAccountBoundary;
 
     private final SaveAccountBoundary saveAccountBoundary;
 
-    public Account createAccount(String userId, String cnpj) {
-        Optional<User> user = findUserByIdBoundary.findUser(userId);
+    private final Integer agency = generateRandomNumber(4);
 
-        if (user.isEmpty()) {
-            throw new ResourceViolationException("Invalid user");
-        }
+    public Account createAccount(String userId, String cnpj) {
+        User user = findUserByIdBoundary.findUser(userId).orElseThrow(() -> new ResourceViolationException("Invalid user"));
 
         Optional<Account> optionalAccount = findAccountByUserIdBoundary.findAccount(userId);
 
@@ -47,8 +42,8 @@ public class CreateAccountUseCase {
 
         Account account = Account.builder()
                 .id(UUID.randomUUID().toString())
-                .user(user.get())
-                .agency(generateAgencyNumber())
+                .user(user)
+                .agency(agency)
                 .number(generateAccountNumber())
                 .cnpj(nonNull(cnpj) ? cnpj : null)
                 .balance(BigDecimal.ZERO)
@@ -57,22 +52,12 @@ public class CreateAccountUseCase {
         return saveAccountBoundary.saveAccount(account);
     }
 
-    private Integer generateAgencyNumber() {
-        Integer accountAgency;
-
-        do {
-            accountAgency = generateRandomNumber(4);
-        } while (findAccountByAgencyBoundary.findAccount(accountAgency).isPresent());
-
-        return accountAgency;
-    }
-
     private Integer generateAccountNumber() {
         Integer accountNumber;
 
         do {
             accountNumber = generateRandomNumber(5);
-        } while (findAccountByNumberBoundary.findAccount(accountNumber).isPresent());
+        } while (findAccountBoundary.findAccount(agency, accountNumber).isPresent());
 
         return accountNumber;
     }

@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "agencies")
+@Table(name = "accounts")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

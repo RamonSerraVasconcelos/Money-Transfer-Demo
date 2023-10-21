@@ -4,7 +4,7 @@ import com.money.transfer.core.model.Account;
 
 import java.util.Optional;
 
-public interface FindAccountByNumberBoundary {
+public interface FindAccountBoundary {
 
-    Optional<Account> findAccount(Integer agency);
+    Optional<Account> findAccount(Integer agency, Integer number);
 }
