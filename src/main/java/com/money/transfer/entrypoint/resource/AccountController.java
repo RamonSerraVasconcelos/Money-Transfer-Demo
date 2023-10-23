@@ -49,7 +49,7 @@ public class AccountController {
            throw new ResourceViolationException(violations);
        }
 
-       addBalanceUseCase.addBalance(depositRequestDto.getUserId(), depositRequestDto.getAmount());
+       addBalanceUseCase.addBalance(depositRequestDto.getAgency(), depositRequestDto.getAccountNumber(), depositRequestDto.getAmount());
 
        return ResponseEntity.ok().build();
     }

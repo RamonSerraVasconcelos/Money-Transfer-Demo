@@ -2,6 +2,7 @@ package com.money.transfer.core.usecase;
 
 import com.money.transfer.core.model.Account;
 import com.money.transfer.core.model.User;
+import com.money.transfer.core.usecase.boundary.FindAccountBoundary;
 import com.money.transfer.core.usecase.boundary.FindAccountByUserIdBoundary;
 import com.money.transfer.core.usecase.boundary.FindUserByIdBoundary;
 import com.money.transfer.core.usecase.boundary.SaveAccountBoundary;
@@ -16,16 +17,12 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class AddBalanceUseCase {
 
-    private final FindUserByIdBoundary findUserByIdBoundary;
-
-    private final FindAccountByUserIdBoundary findAccountByUserIdBoundary;
+    private final FindAccountBoundary findAccountBoundary;
 
     private final SaveAccountBoundary saveAccountBoundary;
 
-    public void addBalance(String userId, BigDecimal amount) {
-        User user = findUserByIdBoundary.findUser(userId).orElseThrow(() -> new ResourceViolationException("Invalid user"));
-
-        Account account = findAccountByUserIdBoundary.findAccount(user.getId()).orElseThrow(() -> new ResourceNotFoundException("User does not have an account"));
+    public void addBalance(Integer agency, Integer accountNumber, BigDecimal amount) {
+        Account account = findAccountBoundary.findAccount(agency, accountNumber).orElseThrow(() -> new ResourceNotFoundException("Account not found"));
 
         int comparisonResult = amount.compareTo(BigDecimal.ZERO);
 
