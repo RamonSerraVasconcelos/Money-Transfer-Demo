@@ -1,10 +1,7 @@
 package com.money.transfer.core.usecase;
 
 import com.money.transfer.core.model.Account;
-import com.money.transfer.core.model.User;
 import com.money.transfer.core.usecase.boundary.FindAccountBoundary;
-import com.money.transfer.core.usecase.boundary.FindAccountByUserIdBoundary;
-import com.money.transfer.core.usecase.boundary.FindUserByIdBoundary;
 import com.money.transfer.core.usecase.boundary.SaveAccountBoundary;
 import com.money.transfer.exception.ResourceNotFoundException;
 import com.money.transfer.exception.ResourceViolationException;
