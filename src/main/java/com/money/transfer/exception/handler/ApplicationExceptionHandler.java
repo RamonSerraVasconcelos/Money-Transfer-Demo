@@ -1,8 +1,11 @@
 package com.money.transfer.exception.handler;
 
+import com.money.transfer.exception.ForbiddenException;
+import com.money.transfer.exception.InsufficientFundsException;
 import com.money.transfer.exception.ResourceConflictException;
 import com.money.transfer.exception.ResourceNotFoundException;
 import com.money.transfer.exception.ResourceViolationException;
+import com.money.transfer.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -36,5 +39,20 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorDetails> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildResponseError("Invalid request data"));
+    }
+
+    @ExceptionHandler(InsufficientFundsException.class)
+    public ResponseEntity<ErrorDetails> insufficientFundsExceptionHandler(InsufficientFundsException ex) {
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(buildResponseError(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorDetails> unauthorizedExceptionHandler(UnauthorizedException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(buildResponseError(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorDetails> forbiddenExceptionHandler(ForbiddenException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(buildResponseError(ex.getMessage()));
     }
 }

@@ -5,11 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AccountRepository extends JpaRepository<AccountEntity, String> {
 
-    AccountEntity findByAgency(Integer agencyNumber);
-
     AccountEntity findByAgencyAndNumber(Integer agency, Integer number);
-
-    AccountEntity findByNumber(Integer number);
 
     AccountEntity findByUserId(String userId);
 }

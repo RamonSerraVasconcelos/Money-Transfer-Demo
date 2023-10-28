@@ -21,4 +21,8 @@ public class Account {
     private Integer number;
     private String cnpj;
     private BigDecimal balance;
+
+    public boolean isAccountPJ() {
+        return cnpj != null;
+    }
 }
