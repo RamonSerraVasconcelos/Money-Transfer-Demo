@@ -3,9 +3,11 @@ package com.money.transfer.entrypoint.resource;
 import com.money.transfer.core.model.Account;
 import com.money.transfer.core.usecase.AddBalanceUseCase;
 import com.money.transfer.core.usecase.CreateAccountUseCase;
+import com.money.transfer.core.usecase.TransferUseCase;
 import com.money.transfer.entrypoint.dto.AccountRequestDto;
 import com.money.transfer.entrypoint.dto.AccountResponseDto;
 import com.money.transfer.entrypoint.dto.DepositRequestDto;
+import com.money.transfer.entrypoint.dto.TransferRequestDto;
 import com.money.transfer.entrypoint.mapper.AccountDtoMapper;
 import com.money.transfer.exception.ResourceViolationException;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ public class AccountController {
     private final CreateAccountUseCase createAccountUseCase;
 
     private final AddBalanceUseCase addBalanceUseCase;
+
+    private final TransferUseCase transferUseCase;
 
     private final Validator validator;
 
@@ -52,5 +56,17 @@ public class AccountController {
        addBalanceUseCase.addBalance(depositRequestDto.getAgency(), depositRequestDto.getAccountNumber(), depositRequestDto.getAmount());
 
        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<Void> transfer(@RequestBody TransferRequestDto transferRequestDto) {
+        Set<ConstraintViolation<TransferRequestDto>> violations = validator.validate(transferRequestDto);
+        if (!violations.isEmpty()) {
+            throw new ResourceViolationException(violations);
+        }
+
+        transferUseCase.transfer(transferRequestDto.getPayerId(), transferRequestDto.getAgency(), transferRequestDto.getAccountNumber(), transferRequestDto.getAmount());
+
+        return ResponseEntity.ok().build();
     }
 }

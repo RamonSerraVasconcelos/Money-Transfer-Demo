@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/transfer/authorize"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "authorizeResponse.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -23,7 +23,7 @@ public class NotifyTransferReceiverGateway implements NotifyTransferReceiverBoun
                 .amount(amountReceived)
                 .build();
 
-        ResponseEntity<Void> response = restTemplate.postForEntity("https://mock.codes/", notifyTransferReceiverDto, Void.class);
+        ResponseEntity<Void> response = restTemplate.postForEntity("http://localhost:8082/transfer/notify", notifyTransferReceiverDto, Void.class);
 
         if(response.getStatusCode().isError()) {
             log.error("Error notifying user. statusCode: [{}]", response.getStatusCodeValue());

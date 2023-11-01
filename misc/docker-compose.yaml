@@ -11,6 +11,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  wiremock:
+    image: wiremock/wiremock
+    container_name: wiremock
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./mocks/:/home/wiremock/
 volumes:
   postgres_data:
     driver: local

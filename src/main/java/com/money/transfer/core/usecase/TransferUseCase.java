@@ -2,7 +2,6 @@ package com.money.transfer.core.usecase;
 
 import com.money.transfer.core.model.Account;
 import com.money.transfer.core.model.TransferAuthorization;
-import com.money.transfer.core.model.User;
 import com.money.transfer.core.model.enums.AuthorizationStatusEnum;
 import com.money.transfer.core.usecase.boundary.AuthorizeTransactionBoundary;
 import com.money.transfer.core.usecase.boundary.FindAccountBoundary;
@@ -42,7 +41,7 @@ public class TransferUseCase {
 
             Account targetAccount = findAccountBoundary.findAccount(accountAgency, accountNumber).orElseThrow(() -> new ResourceNotFoundException("Invalid account"));
 
-            if(sourceAccount.isAccountPJ()) {
+            if (sourceAccount.isAccountPJ()) {
                 throw new ForbiddenException("PJ Accounts are not authorized to perform this action");
             }
 
@@ -52,7 +51,7 @@ public class TransferUseCase {
 
             TransferAuthorization transferAuthorization = authorizeTransactionBoundary.authorizeTransaction(sourceUserId);
 
-            if(!transferAuthorization.getStatus().equals(AuthorizationStatusEnum.AUTHORIZED)) {
+            if (!transferAuthorization.getStatus().equals(AuthorizationStatusEnum.AUTHORIZED)) {
                 throw new ForbiddenException("The transaction was not authorized by the authorization entity");
             }
 
