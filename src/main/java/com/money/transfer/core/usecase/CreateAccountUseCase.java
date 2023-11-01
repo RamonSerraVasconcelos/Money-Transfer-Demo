@@ -3,9 +3,11 @@ package com.money.transfer.core.usecase;
 import com.money.transfer.core.model.Account;
 import com.money.transfer.core.model.User;
 import com.money.transfer.core.usecase.boundary.FindAccountBoundary;
+import com.money.transfer.core.usecase.boundary.FindAccountByCnpjBoundary;
 import com.money.transfer.core.usecase.boundary.FindAccountByUserIdBoundary;
 import com.money.transfer.core.usecase.boundary.FindUserByIdBoundary;
 import com.money.transfer.core.usecase.boundary.SaveAccountBoundary;
+import com.money.transfer.exception.ResourceConflictException;
 import com.money.transfer.exception.ResourceViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,8 @@ public class CreateAccountUseCase {
 
     private final FindAccountBoundary findAccountBoundary;
 
+    private final FindAccountByCnpjBoundary findAccountByCnpjBoundary;
+
     private final SaveAccountBoundary saveAccountBoundary;
 
     private final Integer agency = generateRandomNumber(4);
@@ -38,6 +42,12 @@ public class CreateAccountUseCase {
 
         if(optionalAccount.isPresent()) {
             throw new ResourceViolationException("User already has an account");
+        }
+
+        Optional<Account> optionalAccountByCnpj = findAccountByCnpjBoundary.findAccount(cnpj);
+
+        if(optionalAccountByCnpj.isPresent()) {
+            throw new ResourceConflictException("Cnpj is already registered");
         }
 
         Account account = Account.builder()
