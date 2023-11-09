@@ -27,7 +27,7 @@ services:
       POSTGRES_URL: jdbc:postgresql://postgres:5432/money_transfer_demo
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      AUTHORIZATION_SERVICE_URL: http://wiremock:8082
+      AUTHORIZATION_SERVICE_URL: http://wiremock:8080
     ports:
       - "8081:8081"
     depends_on:
