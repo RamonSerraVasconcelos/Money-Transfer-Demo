@@ -18,6 +18,20 @@ services:
       - "8082:8080"
     volumes:
       - ./mocks/:/home/wiremock/
+  money-transfer-service:
+    container_name: money-transfer-service
+    build:
+      context: ../
+    image: money-transfer-demo
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/money_transfer_demo
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      - wiremock
 volumes:
   postgres_data:
     driver: local
