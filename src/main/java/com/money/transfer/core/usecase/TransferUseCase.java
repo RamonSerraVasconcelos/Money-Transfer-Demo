@@ -12,9 +12,11 @@ import com.money.transfer.core.usecase.boundary.UpdateAccountBalanceBoundary;
 import com.money.transfer.exception.ForbiddenException;
 import com.money.transfer.exception.InsufficientFundsException;
 import com.money.transfer.exception.ResourceNotFoundException;
+import com.money.transfer.exception.ResourceViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.math.BigDecimal;
 
@@ -62,6 +64,10 @@ public class TransferUseCase {
             updateAccountBalanceBoundary.updateBalance(targetAccount);
 
             notifyTransferReceiverBoundary.notifyUser(targetAccount.getUser().getId(), amount);
+        } catch (ResourceAccessException e) {
+            log.error("Error completing transfer", e);
+
+            throw new ResourceViolationException("Authorization services are unavailable");
         } catch (Exception e) {
             log.error("Error completing transfer", e);
             throw e;
