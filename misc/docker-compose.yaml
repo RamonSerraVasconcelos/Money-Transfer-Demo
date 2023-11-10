@@ -5,6 +5,7 @@ services:
     container_name: postgres-money-transfer-demo
     restart: always
     environment:
+      POSTGRES_DB: money_transfer_demo
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     ports:
