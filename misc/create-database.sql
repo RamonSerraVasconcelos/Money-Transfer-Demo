@@ -1,0 +1,1 @@
+CREATE DATABASE money_transfer_demo;

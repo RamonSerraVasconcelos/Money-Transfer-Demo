@@ -5,13 +5,13 @@ services:
     container_name: postgres-money-transfer-demo
     restart: always
     environment:
-      POSTGRES_DB: money_transfer_demo
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - money_transfer_demo_postgres_data:/var/lib/postgresql/data
+      - ./create-database.sql:/docker-entrypoint-initdb.d/create_database.sql
   wiremock:
     image: wiremock/wiremock
     container_name: wiremock
@@ -35,5 +35,5 @@ services:
       - postgres
       - wiremock
 volumes:
-  postgres_data:
+  money_transfer_demo_postgres_data:
     driver: local
